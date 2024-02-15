@@ -1,9 +1,12 @@
 import {EDIT_ITEM, PUSH_LIST, 
     SET_PRICE_INPUT, SET_SERVICE_INPUT,
-CHANGE_EDIT, REMOVE_ITEM} from './actions';
+CHANGE_EDIT, REMOVE_ITEM, SEARCH_ITEMS, TOGGLE_FILTER} from './actions';
 
 const initialState = {
     list: [],
+    filterList: [],
+    filter: false,
+    search: '',
     serviceInput: '',
     priceInput: '',
     editStatus: false,
@@ -26,6 +29,7 @@ const editReducer = (state = initialState, action) => {
         return {
             ...state,
             list: [...state.list, action.payload],
+            filterList: [...state.list, action.payload].filter((el) => el.service.includes(state.search)),
             serviceInput: '',
             priceInput: '',
             
@@ -56,19 +60,33 @@ const editReducer = (state = initialState, action) => {
             newItem,
             ...state.list.slice(itemIndex + 1)
           ],
+          filterList: [...state.list.slice(0, itemIndex),
+            newItem,
+            ...state.list.slice(itemIndex + 1)
+          ].filter((el) => el.service.includes(state.search)),
             serviceInput: '',
             priceInput: '',
             editStatus: false,
-
-
         }  
       case REMOVE_ITEM:
       return {
         ...state,
-        list: state.list.filter(el => el.id != action.payload)
+        list: state.list.filter(el => el.id != action.payload),
+        filterList: state.list.filter(el => el.id != action.payload).filter((el) => el.service.includes(state.search)),
       }
+      case SEARCH_ITEMS: 
+      return {
+        ...state, 
+        filterList: state.list.filter((el) => el.service.includes(action.payload)),
+        search: action.payload,
+      }
+      case TOGGLE_FILTER:
+        return {
+          ...state,
+          filter: action.payload,
+        }
       default: 
-        return state   
+        return state;   
     }
 }
 

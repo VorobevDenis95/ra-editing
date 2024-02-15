@@ -1,4 +1,4 @@
-import { SET_PRICE_INPUT, SET_SERVICE_INPUT, EDIT_ITEM, REMOVE_ITEM, CHANGE_EDIT } from "./actions";
+import { SET_PRICE_INPUT, SET_SERVICE_INPUT, EDIT_ITEM, REMOVE_ITEM, CHANGE_EDIT, SEARCH_ITEMS, TOGGLE_FILTER } from "./actions";
 
 export const changePrice = (dispatch) => (value) => {
     const action = {
@@ -39,3 +39,20 @@ export const changeItem = (dispatch) => (id) => {
     }
     dispatch(action);
 }
+
+export const changeFilterInput = (dispatch) => (value) => {
+    const action = {
+        type: SEARCH_ITEMS,
+        payload: value,
+    }
+    dispatch(action);
+}
+
+export const toggleFilter = (dispatch) => (value) => {
+    const action = {
+        type: TOGGLE_FILTER,
+        payload: value,
+    }
+    dispatch(action)
+}
+
